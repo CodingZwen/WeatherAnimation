@@ -15,11 +15,14 @@ public class Snowflake  {
 	float angle=90;
 	double dx;
 	double dy;
-	double speed=2;
+	double speed=10;
 	float RADIANT = 0.017453f;
 	Random rand = new Random();
 	boolean colliding= false;
+	boolean havetarget= true;
 	Color c;
+	Vector2i target;
+	boolean visible = true;
 	
 	
 	public Color getcollidecolor(){ return new Color(255,0,0,255);}
@@ -29,7 +32,7 @@ public class Snowflake  {
 		
 		x = rand.nextInt(screenwidth);
 		speed = rand.nextInt(3)+2;
-		y = 0;
+		y = rand.nextInt(screenheight);
 		screenx=screenwidth;
 		screeny=screenheight;
 		c = Color.white;
@@ -56,21 +59,38 @@ public class Snowflake  {
 		c = _c;
 	}
 	
-	public void update() {
+	public void update(Vector2i mousepos) {
 		
-		if(!colliding){
-		angle = rand.nextInt(105)+35;
-		dx = Math.cos(angle*RADIANT) * speed; //bei 0 also nach rechts kommt hier cos =1 raus
-		dy = Math.sin(angle*RADIANT) * speed; //hier kommt bei angle 0, also sin 0 = 0 raus deswegen nach rechts
-		x += dx;
-		y += dy;
 		
-		}
-		
+		if(!havetarget)BehaveLikeSnowFlake();
+		else BehaveFollowVector(mousepos);
 		
 		checkbounds();
 		
+	}
+	
+	public void BehaveFollowVector(Vector2i target)
+	{
 		
+		
+		if(x < target.getX())x+=speed;
+		if(x > target.getX())x-=speed;
+
+		if(y < target.getY())y+=speed;
+		if(y > target.getY())y-=speed;
+		
+	}
+	
+	public void BehaveLikeSnowFlake()
+	{
+		if(!colliding){
+			angle = rand.nextInt(105)+35;
+			dx = Math.cos(angle*RADIANT) * speed; //bei 0 also nach rechts kommt hier cos =1 raus
+			dy = Math.sin(angle*RADIANT) * speed; //hier kommt bei angle 0, also sin 0 = 0 raus deswegen nach rechts
+			x += dx;
+			y += dy;
+			
+			}
 	}
 	
 	boolean iscolliding(){return colliding;}

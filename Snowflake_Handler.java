@@ -1,4 +1,6 @@
 import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,8 +66,10 @@ Timer move;
 						schnee.get(i).setColor(Color.WHITE);
 					}
 					
-					
-					schnee.get(i).update();
+					//
+					Point location = MouseInfo.getPointerInfo().getLocation();
+					schnee.get(i).update(new Vector2i(location.x,location.y));
+					collide();
 				}
 
 			}
@@ -95,6 +99,17 @@ Timer move;
 	
 	public void collide()
 	{
+		for (int i = 0; i < schnee.size(); i++) {
+			
+			for (int j = i+1; j < schnee.size(); j++) {
+				
+				if(schnee.get(i).checkcollision(schnee.get(j).x, schnee.get(j).y, 5,5) )
+				{
+					schnee.get(i).setColor(Color.green);
+					schnee.get(j).setColor(Color.magenta);
+				}
+			}
+		}
 		
 	}
 	
@@ -166,7 +181,7 @@ Timer move;
 				Node node = new Node(at,current,gCost,hCost);
 				//wenn node in liste
 				if(vecInList(closedList,at) && gCost >= node.gCost)continue;
-				//wenn es nicht in der open list ist, fügen wir es hinzu
+				//wenn es nicht in der open list ist, fï¿½gen wir es hinzu
 				if(!vecInList(openList,at) || gCost < current.gCost)openList.add(node);
 				
 				

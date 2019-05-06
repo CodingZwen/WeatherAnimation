@@ -14,7 +14,7 @@ public class malFunktion extends JLabel{
 		
 	
 	public malFunktion() {
-			sh.init(800,650, 1000);	
+			sh.init(800,650, 100);	
 			this.setBackground(Color.black);
 			
 			
@@ -42,7 +42,8 @@ public class malFunktion extends JLabel{
 	{
 		
 		g.setColor(new Color(210,10,10,122));
-		g.drawRect(sh.mouseposx, sh.mouseposy, 50, 50);
+		g.drawOval(sh.mouseposx, sh.mouseposy, 50, 50);
+		
 		
 	}
 	
@@ -54,8 +55,17 @@ public class malFunktion extends JLabel{
 		for (int i = 0; i < sh.schnee.size(); i++) {
 
 			g.setColor(sh.schnee.get(i).c);
+			
+			
+			
+			if(sh.schnee.get(i).visible == true)
+			{
 			g.fillRect(sh.schnee.get(i).x, sh.schnee.get(i).y,
 					sh.schnee.get(i).ratio, sh.schnee.get(i).ratio);
+			}else 
+			{
+				
+			}
 
 		}
 			

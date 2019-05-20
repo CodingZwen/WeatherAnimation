@@ -25,6 +25,8 @@ Timer move;
 	float snowlevel = 10.0f;
 	float faktor = 1.1f;
 	
+	int SIZE = 23;
+	
 	
 	
 	private Comparator<Node> nodeSorter = new Comparator<Node>() {
@@ -85,7 +87,7 @@ Timer move;
 		
 		for(int i =0;i < count;i++){
 			
-			Snowflake sf = new Snowflake(screenwidth,screenheight);
+			Snowflake sf = new Snowflake(screenwidth,screenheight,SIZE);
 			schnee.add(sf);
 		}
 		
@@ -93,7 +95,7 @@ Timer move;
 	
 	public void pop(){
 		
-		Snowflake sf = new Snowflake(screenx,screeny);
+		Snowflake sf = new Snowflake(screenx,screeny,SIZE);
 		schnee.add(sf);
 	}
 	
@@ -103,12 +105,22 @@ Timer move;
 			
 			for (int j = i+1; j < schnee.size(); j++) {
 				
-				if(schnee.get(i).checkcollision(schnee.get(j).x, schnee.get(j).y, 5,5) )
+				if(schnee.get(i).checkcollision(schnee.get(j).x, schnee.get(j).y,
+						schnee.get(i).ratio,schnee.get(i).ratio) )
 				{
-					schnee.get(i).setColor(Color.green);
-					schnee.get(j).setColor(Color.magenta);
+					schnee.get(i).setColor(new Color(255,0,150,255));
+					schnee.get(j).setColor(new Color(255,0,150,255));
 				}
 			}
+		}
+		
+	}
+	
+	public void setBehave()
+	{
+		for (int i = 0; i < schnee.size(); i++) {
+			
+			schnee.get(i).havetarget = !schnee.get(i).havetarget;
 		}
 		
 	}

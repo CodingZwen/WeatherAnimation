@@ -35,6 +35,10 @@ public class Vector2i {
 		
 	}
 	
+	public void setX(int x){this.x=x;}
+	public void setY(int y){this.y=y;}
+	
+	
 	public boolean euqals(Object object)
 	{
 		if(!(object instanceof Vector2i))return false;
@@ -53,6 +57,9 @@ public class Vector2i {
 	{
 		return new Vector2i(x,y);
 	}
+
+	public void setX(double x){this.x=(int)x;}
+	public void setY(double y){this.y=(int)y;}
 
 
 }

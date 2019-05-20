@@ -10,7 +10,7 @@ public class Snowflake  {
 	int x,y;
 	int width =1;
 	int height= 1;
-	int ratio=5;
+	int ratio;
 	int screenx, screeny;
 	float angle=90;
 	double dx;
@@ -23,19 +23,40 @@ public class Snowflake  {
 	Color c;
 	Vector2i target;
 	boolean visible = true;
+	public enum KiStates  { HAVETARGET,SNOWLIKE,INPUT}
+	KiStates modi = KiStates.INPUT;
+
+	
 	
 	
 	public Color getcollidecolor(){ return new Color(255,0,0,255);}
 	public Color getnormalcolor(){ return new Color(255,255,255,255);}
 	
-	public Snowflake(int screenwidth, int screenheight) {
+	public Snowflake(int screenwidth, int screenheight, int ratio) {
 		
+		this.ratio = ratio;
 		x = rand.nextInt(screenwidth);
 		speed = rand.nextInt(3)+2;
 		y = rand.nextInt(screenheight);
 		screenx=screenwidth;
 		screeny=screenheight;
 		c = Color.white;
+	}
+	
+	public void changeKi(int KI)
+	{
+		if(KI>2)return;
+		
+		
+		switch(KI)
+		{
+		case 0 : modi = KiStates.HAVETARGET;break;
+		case 1 : modi = KiStates.SNOWLIKE;break;
+		case 2 : modi = KiStates.INPUT;break;
+		
+		
+		
+		}
 	}
 	
 	public double getDistance(int targetx, int targety)
@@ -56,14 +77,22 @@ public class Snowflake  {
 	
 	public void setColor(Color _c)
 	{
-		c = _c;
+		this.c = _c;
 	}
 	
 	public void update(Vector2i mousepos) {
 		
 		
-		if(!havetarget)BehaveLikeSnowFlake();
-		else BehaveFollowVector(mousepos);
+		switch(modi)
+		{
+		case HAVETARGET : BehaveFollowVector(mousepos);break;
+		case SNOWLIKE : BehaveLikeSnowFlake();break;
+		case INPUT : break;
+		default:break;
+		
+		}
+		
+	
 		
 		checkbounds();
 		
@@ -79,18 +108,43 @@ public class Snowflake  {
 		if(y < target.getY())y+=speed;
 		if(y > target.getY())y-=speed;
 		
+		
 	}
 	
 	public void BehaveLikeSnowFlake()
 	{
-		if(!colliding){
+		
+		
 			angle = rand.nextInt(105)+35;
 			dx = Math.cos(angle*RADIANT) * speed; //bei 0 also nach rechts kommt hier cos =1 raus
 			dy = Math.sin(angle*RADIANT) * speed; //hier kommt bei angle 0, also sin 0 = 0 raus deswegen nach rechts
 			x += dx;
 			y += dy;
+	
 			
-			}
+			
+	}
+	
+	void moveRight()
+	{
+		x+=speed;
+	}
+
+	void moveLeft()
+	{
+		x-=speed;
+	}
+	
+	
+	void moveUp()
+	{
+		y-=speed;
+		
+	}
+	
+	void moveDown()
+	{
+		y+=speed;
 	}
 	
 	boolean iscolliding(){return colliding;}
@@ -108,16 +162,44 @@ public class Snowflake  {
 		}
 	}
 	
-	public boolean checkcollision(int x,int y, int width,int height){
+	//checks own collsion with target
+	public boolean checkcollision(int x, int y, int width, int height)
+	{
+
+		boolean collide = false;
+
+		if (this.x <= x + width && this.x + this.width >= x && this.x>= x
+				&& this.y <= y + height && this.height + this.y >= y)
+		{
+			collide = true;
+			// System.out.println("collisjon :D");
+
+		} else if (this.x+this.height <= x + width && this.x + this.width >= x
+				&& this.y <= y + height && this.height + this.y >= y)
+		{
+			collide = true;
+		}
 		
-		if (this.x < x + width &&
-				   this.x + this.width > x &&
-				   this.y < y + height &&
-				   this.height + this.y > y) {
+		
+		return collide;
+
+	}
+
+}
+
+
+
+
+/*
+ * 
+ * boolean collide = false;
+		
+		if (this.x <= x + width &&
+			this.x + this.width >= x &&
+			this.y <= y + height &&
+			this.height + this.y >= y) {
 		
 			//System.out.println("collisjon :D");
 			return true;
 		}else return false;
-	}
-
-}
+ * */

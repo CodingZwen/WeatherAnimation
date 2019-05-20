@@ -14,7 +14,7 @@ public class malFunktion extends JLabel{
 		
 	
 	public malFunktion() {
-			sh.init(800,650, 100);	
+			sh.init(800,650, 3);	
 			this.setBackground(Color.black);
 			
 			
